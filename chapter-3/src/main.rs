@@ -18,6 +18,59 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+//! # Chapter 3
+//!
+//! The goal of this chapter is to take the code of chapter 2 and make it compile and run inside
+//! of a browser!
+//!
+//! In order to compile for the browser, follow these steps:
+//!
+//! - Create a docker container with the image `tomaka/rustc-emscripten`. This can be done by
+//!   running `docker run --rm -it -v `pwd`:/usr/code -w /usr/code tomaka/rustc-emscripten` from
+//!   the root of this repository.
+//! - From inside the container, go to the `chapter-3` directory and run
+//!   `cargo build --target=asmjs-unknown-emscripten`.
+//! - Open the `browser.html` file included in this crate in your browser. It should automatically
+//!   find the generated JavaScript code.
+//!
+//! In addition to `browser.html`, you are also given a file `platform.rs`. This file contains
+//! platform-independant code that allows you to run an events loop and receive messages from stdin
+//! in a cross-plaform way. See the usage in the `main()` function below.
+//!
+//! The browser doesn't support dialing to a TCP port. The only protocol that is allow is
+//! websockets. Good news, however! The `build_transport()` method automatically builds a transport
+//! that supports websockets. To use them, instead of dialing `/ip4/1.2.3.4/tcp/1000`, you can
+//! dial `/ip4/1.2.3.4/tcp/1000/ws`.
+//!
+//! Additionally, please note that the browser doesn't support listening to any connection. You can
+//! use `if cfg!(not(target_os = "emscripten")) { ... }` to listen only when outside of the
+//! browser.
+//!
+//! Good luck!
+
+extern crate futures;
+extern crate tokio_io;
+
+#[cfg(target_os = "emscripten")]
+#[macro_use]
+extern crate stdweb;
+
+mod platform;
+
 fn main() {
-    println!("Hello, world!");
+    // The `PlatformSpecific` object allows you to handle the transport and stdin in a
+    // cross-platform manner.
+    let platform = platform::PlatformSpecific::default();
+
+    // This builds an implementation of `Transport` (alternative to the `TcpConfig` object in
+    // earlier chapters).
+    let transport = platform.build_transport();
+
+    // This builds a stream of messages coming from stdin.
+    let stdin = platform.stdin();
+
+    // Insert your code here!
+
+    // Instead of `core.run()`, use `platform.run()`.
+    //platform.run(final_future);
 }

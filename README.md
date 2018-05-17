@@ -9,6 +9,7 @@ of these libraries.
 - Clone this repository: `git clone https://github.com/tomaka/rustfest-2018-workshop`.
 - Read `chapter-1/src/main.rs` to start with the first task.
 - Once done, go to `chapter-2/src/main.rs`.
+- Once done, go to `chapter-3/src/main.rs`.
 
 Remember that you can run `cargo doc` in order to generate the documentation of all the
 dependencies used by a package.
