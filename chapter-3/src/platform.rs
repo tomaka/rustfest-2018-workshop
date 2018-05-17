@@ -36,6 +36,7 @@ extern crate tokio_stdin;
 extern crate tokio_timer;
 
 use futures::{Future, Stream};
+#[cfg(not(target_os = "emscripten"))]
 use self::libp2p_core::Transport;
 use std::fmt::Debug;
 use std::io::Error as IoError;
