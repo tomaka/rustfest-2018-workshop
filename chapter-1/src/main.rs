@@ -18,6 +18,16 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+//! # Chapter 1
+//!
+//! Welcome to chapter 1 of this workshop!
+//!
+//! The code below uses libp2p, futures and tokio in order to listen for incoming connections, and
+//! writes "Hello world" on any socket being opened to the server.
+//!
+//! Your task is to add the code (in `main.rs` as well) that dials a server and reads the message
+//! being written.
+
 extern crate futures;
 extern crate libp2p;
 extern crate tokio_io;
