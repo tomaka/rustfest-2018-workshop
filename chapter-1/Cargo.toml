@@ -5,5 +5,5 @@ authors = ["Pierre Krieger <pierre.krieger1708@gmail.com>"]
 
 [dependencies]
 futures = "0.1"
-libp2p = { git = "https://github.com/tomaka/libp2p-rs", branch = "libp2p-facade" }
+libp2p = { git = "https://github.com/libp2p/rust-libp2p" }
 tokio-io = "0.1"
