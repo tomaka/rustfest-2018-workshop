@@ -32,15 +32,16 @@
 extern crate futures;
 extern crate libp2p;
 extern crate rand;
+extern crate tokio_core;
 extern crate tokio_io;
 extern crate tokio_stdin;
 
 use futures::{Future, Stream};
+use tokio_core::reactor::Core;
 
 use libp2p::{Multiaddr, PeerId};
 use libp2p::core::Transport;
 use libp2p::floodsub::{FloodSubUpgrade, FloodSubController, TopicBuilder};
-use libp2p::tokio_core::reactor::Core;
 
 fn main() {
     // Same as in chapter 1.

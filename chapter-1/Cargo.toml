@@ -6,4 +6,5 @@ authors = ["Pierre Krieger <pierre.krieger1708@gmail.com>"]
 [dependencies]
 futures = "0.1"
 libp2p = { git = "https://github.com/libp2p/rust-libp2p" }
+tokio-core = "0.1"
 tokio-io = "0.1"

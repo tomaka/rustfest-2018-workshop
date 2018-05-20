@@ -30,14 +30,15 @@
 
 extern crate futures;
 extern crate libp2p;
+extern crate tokio_core;
 extern crate tokio_io;
 
 use futures::{Future, Stream};
 use tokio_io::io;
+use tokio_core::reactor::Core;
 
 use libp2p::Multiaddr;
 use libp2p::core::Transport;
-use libp2p::tokio_core::reactor::Core;
 
 fn main() {
     // We start by building the tokio engine that will be powering the networking of
