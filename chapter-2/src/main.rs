@@ -24,10 +24,10 @@
 //! swarm.
 //!
 //! Libp2p lets you *upgrade* an open connection to a protocol. Once dialing or listening succeeds,
-//! instead of a socket you will obtain the output of the upgrade.
-//! This output depends on the upgrade you apply and can be various things: a stream that wraps
-//! around the socket, various information about the remote, a future that must be driven to
-//! completion, etc.
+//! instead of a socket you will obtain the *output* of the upgrade.
+//! The nature of this output depends on the upgrade you apply and can be various things, such as a
+//! stream that wraps around the socket, various information about the remote, a future that must
+//! be driven to completion, etc.
 
 extern crate futures;
 extern crate libp2p;
@@ -53,11 +53,13 @@ fn main() {
         .expect("failed to parse multiaddress");
 
     // We are going to tweak `transport` so that all the incoming and outgoing connections
-    // automatically negotiate a protocol named *floodsub*.
-    // This is done by first creating a `FloodSubUpgrade`, then calling `with_upgrade`.
+    // automatically negotiate a protocol named *floodsub*. Floodsub is a pub-sub protocol that
+    // allows one to propagate messages throughout the network.
+    // Tweaking the transport is done by first creating a `FloodSubUpgrade`, then calling
+    // `with_upgrade`.
     //
-    // As part of the protocol, which need to pass a *PeerId* to `FloodSubUpgrade::news()`. We just
-    // generate it randomly.
+    // As part of the protocol, which need to pass a *PeerId* to `FloodSubUpgrade::news()`. In this
+    // workshop we just generate it randomly.
     let (floodsub_upgrade, floodsub_rx) = {
         let key = (0..2048).map(|_| rand::random::<u8>()).collect::<Vec<_>>();
         FloodSubUpgrade::new(PeerId::from_public_key(&key))
@@ -65,27 +67,27 @@ fn main() {
     let upgraded_transport = transport
         .with_upgrade(floodsub_upgrade.clone());
 
-    // We now create a *swarm*. A swarm is a convenient object that responsible for handling all
+    // We now create a *swarm*. A swarm is a convenient object that is responsible for handling all
     // the incoming and outgoing connections in a single point.
-    // In other words, instead of using the transport to listen and dial, we will use the swarm
-    // instead.
+    // In other words, instead of using the transport to listen and dial, we will use the swarm.
     //
     // The `swarm` function requires not just a `Transport` but a `MuxedTransport`. *Muxing*
     // consists in making multiple streams go through the same socket so that we don't need to open
-    // a new connection every time. In order to implement muxing with any transport, we can just
-    // call `with_dummy_muxing()`.
-    let upgraded_transport_with_muxing = upgraded_transport.with_dummy_muxing();
+    // a new connection every time. In order to add support for muxing with any transport, we can
+    // just call the `with_dummy_muxing()` method of the `Transport` trait.
+    let upgr_trans_with_muxing = upgraded_transport.with_dummy_muxing();
     let (swarm_controller, swarm_future) = libp2p::swarm(
-        upgraded_transport_with_muxing.clone(),
+        upgr_trans_with_muxing.clone(),
         |future, _remote_addr| {
             // The first parameter of this closure (`future`) is the output of the floodsub
             // upgrade. If we didn't apply any upgrade on the transport, it would be the raw socket
             // instead.
             //
-            // In the case of floodsub, the output is a future that must be driven to completion.
-            // The return value of this closure must be a future that is going to be integrated
-            // inside of `swarm_future`. By driving `swarm_future` to completion, we will also
-            // drive this `future` here to completion.
+            // In the case of floodsub, the output is a future that must be driven to completion
+            // for the protocol to work.
+            // Coincidentially, the return value of this closure must be a future that is going to
+            // be integrated inside of `swarm_future`. By driving `swarm_future` to completion, we
+            // will also drive to completion the future coming from floodsub.
             future
         });
 
@@ -96,7 +98,7 @@ fn main() {
     // Now let's handle the floodsub protocol.
     // We already have `floodsub_rx`, which was created earlier. It is a `Stream` of all the
     // messages that we receive from connections upgraded with `floodsub_upgrade`.
-    // We also need to create a `FloodSubController`.
+    // In order to use floodsub, we also need to create a `FloodSubController`.
     let floodsub_controller = FloodSubController::new(&floodsub_upgrade);
 
     // All the messages dispatched through the floodsub protocol belong to what is called a
@@ -104,12 +106,12 @@ fn main() {
     let topic = TopicBuilder::new("workshop-chapter2-topic")
         .build();
 
-    // We need to subscribe to a topic in order to receive the corresponding messages.
+    // We need to subscribe to a topic in order to receive the messages that belong to it.
     // Subscribing to a topic broadcasts a message over the network to signal all the connected
     // nodes that we are interested in this topic.
     floodsub_controller.subscribe(&topic);
 
-    // Let's tweak `floodsub_rx` so that we print received messages on stdout.
+    // Let's tweak `floodsub_rx` so that we print on stdout the messages we receive.
     let floodsub_rx = floodsub_rx
         .for_each(|msg| {
             if let Ok(msg) = String::from_utf8(msg.data) {
@@ -121,16 +123,16 @@ fn main() {
             Ok(())
         });
 
-    // *** ACTION ITEM HERE ***
+    // *** WORKSHOP ACTION ITEM HERE ***
     //
     // Your task in this chapter is to write the rest of the program:
     //
     // - Iterate over `std::env::args().skip(1)` and call `swarm.dial_to_handler()` to dial the
     //   address.
     // - Use the `tokio-stdin` crate to read the message written on stdin, and publish each
-    //   message on the network with `floodsub_controller.publish()`.
+    //   message on the network by calling `floodsub_controller.publish()`.
     //
-    // Once you manage to get two nodes to talk to each other, you can create a third node.
+    // Once you manage to get two nodes to talk to each other, you can spawn a third node.
     // Connect nodes B and C to A, and notice how messages sent by B or C get relayed to C or B
     // by going through A.
     //

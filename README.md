@@ -4,6 +4,9 @@ The purpose of this workshop will be to write a simple peer-to-peer chat applica
 `libp2p` library. This library relies on `futures` and `tokio`, and will also demonstrate the usage
 of these libraries.
 
+[Libp2p](https://libp2p.io) is a peer-to-peer protocol started by protocol labs. It is designed to
+be modular and generic.
+
 ## Steps
 
 - Clone this repository: `git clone https://github.com/tomaka/rustfest-2018-workshop`.

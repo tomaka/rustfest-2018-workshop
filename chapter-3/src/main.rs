@@ -23,8 +23,9 @@
 //! The goal of this chapter is to take the code of chapter 2 and make it compile and run inside
 //! of a browser!
 //!
-//! In order to compile for the browser, follow these steps:
+//! In order to run this code in the browser, follow these steps:
 //!
+//! - Install docker if you haven't done so yet.
 //! - Create a docker container with the image `tomaka/rustc-emscripten`. This can be done by
 //!   running `docker run --rm -it -v `pwd`:/usr/code -w /usr/code tomaka/rustc-emscripten` from
 //!   the root of this repository.
@@ -37,14 +38,14 @@
 //! platform-independant code that allows you to run an events loop and receive messages from stdin
 //! in a cross-plaform way. See the usage in the `main()` function below.
 //!
-//! The browser doesn't support dialing to a TCP port. The only protocol that is allow is
-//! websockets. Good news, however! The `build_transport()` method automatically builds a transport
-//! that supports websockets. To use them, instead of dialing `/ip4/1.2.3.4/tcp/1000`, you can
-//! dial `/ip4/1.2.3.4/tcp/1000/ws`.
+//! The browser doesn't support dialing to a TCP port. The only protocol that is allowed is
+//! websockets. Good news, however! The `build_transport()` method in the `platform` module
+//! automatically builds a transport that supports websockets. To use them, instead of dialing
+//! `/ip4/1.2.3.4/tcp/1000`, you can dial `/ip4/1.2.3.4/tcp/1000/ws`.
 //!
-//! Additionally, please note that the browser doesn't support listening to any connection. You can
-//! use `if cfg!(not(target_os = "emscripten")) { ... }` to listen only when outside of the
-//! browser.
+//! Additionally, please note that the browser doesn't support listening on any connection (even
+//! websockets). Calling `listen_on` will trigger an error at runtime. You can use
+//! `if cfg!(not(target_os = "emscripten")) { ... }` to listen only when outside of the browser.
 //!
 //! Good luck!
 
@@ -62,7 +63,7 @@ fn main() {
     // cross-platform manner.
     let platform = platform::PlatformSpecific::default();
 
-    // This builds an implementation of `Transport` (alternative to the `TcpConfig` object in
+    // This builds an implementation of the `Transport` trait (similar to the `TcpConfig` object in
     // earlier chapters).
     let transport = platform.build_transport();
 
