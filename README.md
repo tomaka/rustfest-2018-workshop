@@ -16,3 +16,13 @@ be modular and generic.
 
 Remember that you can run `cargo doc` in order to generate the documentation of all the
 dependencies used by a package.
+
+## About me
+
+My name is *Pierre* (pronounced "pee-air").
+Don't hesitate to ask for help at any time!
+
+Want to keep in touch?
+
+https://twitter.com/tomaka17
+https://github.com/tomaka
