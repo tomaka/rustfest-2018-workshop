@@ -17,6 +17,8 @@ be modular and generic.
 Remember that you can run `cargo doc` in order to generate the documentation of all the
 dependencies used by a package.
 
+If you are finished and want to go further, just ask your host for a follow-up.
+
 ## About me
 
 My name is *Pierre* (pronounced "pee-air").
