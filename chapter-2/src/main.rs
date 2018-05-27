@@ -127,8 +127,7 @@ fn main() {
     //
     // Your task in this chapter is to write the rest of the program:
     //
-    // - Iterate over `std::env::args().skip(1)` and call `swarm.dial_to_handler()` to dial the
-    //   address.
+    // - Iterate over `std::env::args().skip(1)` and call `swarm.dial()` to dial the address.
     // - Use the `tokio-stdin` crate to read the message written on stdin, and publish each
     //   message on the network by calling `floodsub_controller.publish()`.
     //
