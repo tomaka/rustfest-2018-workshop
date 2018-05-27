@@ -114,7 +114,7 @@ fn main() {
     //   Hint: don't forget to `unwrap()` the output of `dial()`.
     // - The future produces a tuple of a socket (of the same type as `data_stream` above) and
     //   the address of the remote.
-    //   Use `tokio_io::read_to_end` to read what the socket receives and print it to stdout (hint:
+    //   Use `tokio_io::io::read_to_end` to read what the socket receives and print it to stdout (hint:
     //   this should be "Hello world").
     //
     //  Tips:
