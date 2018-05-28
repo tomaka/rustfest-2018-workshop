@@ -29,6 +29,8 @@
 //! - Create a docker container with the image `tomaka/rustc-emscripten`. This can be done by
 //!   running `docker run --rm -it -v `pwd`:/usr/code -w /usr/code tomaka/rustc-emscripten` from
 //!   the root of this repository.
+//!   **UPDATE**: As of the writing of this comment, the image doesn't work. You will have to use
+//!   the `tomaka/rustc-emscripten:workshopfix` image.
 //! - From inside the container, go to the `chapter-3` directory and run
 //!   `cargo build --target=asmjs-unknown-emscripten`.
 //! - Open the `browser.html` file included in this crate in your browser. It should automatically

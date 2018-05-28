@@ -5,6 +5,7 @@ authors = ["Pierre Krieger <pierre.krieger1708@gmail.com>"]
 
 [dependencies]
 futures = "0.1"
+libp2p = { git = "https://github.com/libp2p/rust-libp2p", default-features = false }
 libp2p-core = { git = "https://github.com/libp2p/rust-libp2p", default-features = false }
 libp2p-floodsub = { git = "https://github.com/libp2p/rust-libp2p", default-features = false }
 libp2p-identify = { git = "https://github.com/libp2p/rust-libp2p", default-features = false }
